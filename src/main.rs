@@ -1,8 +1,5 @@
 mod sources;
-#[path = "../gen/config.rs"]
-mod config;
 
-use crate::sources::{fetch_sources, PaletteSource};
 use std::env;
 
 fn main() {
@@ -29,11 +26,10 @@ fn main() {
 }
 
 fn list_sources() {
-    let config_url = config::CONFIG_URL.to_string();
-    match fetch_sources(&config_url) {
+    match sources::load_sources() {
         Ok(sources) => {
             for source in sources.sources {
-                println!("Name: {}, URL: {}, Converter: {}", source.name, source.url, source.converter);
+                println!("{}", source.name);
             }
         }
         Err(e) => eprintln!("Error fetching sources: {}", e),
