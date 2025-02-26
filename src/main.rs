@@ -1,6 +1,9 @@
 mod converters;
 mod palette;
 mod sources;
+mod exporters;
+mod writers;
+mod formatters;
 
 use clap::{Parser, Subcommand};
 
@@ -67,6 +70,9 @@ fn list_destinations() {
     // Example destinations
     println!("inkscape");
     println!("gimp");
+    println!("gpl");
+    println!("scribus");
+    println!("libreoffice");
 }
 
 fn get_palette(destination: &str, source: &str, refresh: bool) {
