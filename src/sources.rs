@@ -72,11 +72,13 @@ fn sources_file_up_to_date() -> Result<bool, std::io::Error> {
     }
 }
 
-pub fn load_sources() -> Result<RenkSources, std::io::Error> {
-    let up_to_date: bool =
-        sources_file_up_to_date().or_else(|_| Ok::<bool, std::io::Error>(false))?;
-    if up_to_date {
-        return load_from_file();
+pub fn load_sources(refresh: bool) -> Result<RenkSources, std::io::Error> {
+    if !refresh {
+        let up_to_date: bool =
+            sources_file_up_to_date().or_else(|_| Ok::<bool, std::io::Error>(false))?;
+        if up_to_date {
+            return load_from_file();
+        }
     }
     match download_sources() {
         Ok(response_text) => {

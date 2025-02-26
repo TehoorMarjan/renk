@@ -1,35 +1,56 @@
-mod sources;
-mod palette;
 mod color;
 mod converters;
+mod palette;
+mod sources;
 
-use std::env;
+use clap::{Parser, Subcommand};
+
+#[derive(Parser)]
+#[command(name = "renk")]
+#[command(about = "A tool for grabing color palettes", long_about = None)]
+struct Cli {
+    #[command(subcommand)]
+    command: Commands,
+
+    #[arg(short, long, action = clap::ArgAction::SetTrue)]
+    refresh: bool,
+}
+
+#[derive(Subcommand)]
+enum Commands {
+    List {
+        #[command(subcommand)]
+        list_command: ListCommands,
+    },
+    Get {
+        destination: String,
+        source: String,
+    },
+}
+
+#[derive(Subcommand)]
+enum ListCommands {
+    Sources,
+    Destinations,
+}
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
-    if args.len() < 2 {
-        eprintln!("Usage: renk <command> [args]");
-        return;
-    }
+    let cli = Cli::parse();
 
-    let command = &args[1];
-    match command.as_str() {
-        "list" => list_sources(),
-        "get" => {
-            if args.len() < 4 {
-                eprintln!("Usage: renk get <destination> <source>");
-                return;
-            }
-            let destination = &args[2];
-            let source = &args[3];
-            get_palette(destination, source);
-        }
-        _ => eprintln!("Unknown command: {}", command),
+    match &cli.command {
+        Commands::List { list_command } => match list_command {
+            ListCommands::Sources => list_sources(cli.refresh),
+            ListCommands::Destinations => list_destinations(),
+        },
+        Commands::Get {
+            destination,
+            source,
+        } => get_palette(destination, source, cli.refresh),
     }
 }
 
-fn list_sources() {
-    match sources::load_sources() {
+fn list_sources(refresh: bool) {
+    match sources::load_sources(refresh) {
         Ok(sources) => {
             for source in sources.sources {
                 println!("{}", source.name);
@@ -39,8 +60,16 @@ fn list_sources() {
     }
 }
 
-fn get_palette(destination: &str, source: &str) {
-    match sources::load_sources() {
+fn list_destinations() {
+    // Implement the logic to list available destinations
+    println!("Available destinations:");
+    // Example destinations
+    println!("inkscape");
+    println!("gimp");
+}
+
+fn get_palette(destination: &str, source: &str, refresh: bool) {
+    match sources::load_sources(refresh) {
         Err(e) => eprintln!("Error fetching sources: {}", e),
         Ok(sources) => {
             for source_description in sources.sources {
