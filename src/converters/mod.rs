@@ -1,10 +1,9 @@
 use std::collections::HashMap;
-use crate::palette::Palette;
-use crate::sources::PaletteSource;
+use crate::{palette::Swatch, sources::PaletteSource};
 
 pub trait Converter {
     fn new(options: &HashMap<String, String>) -> Self where Self: Sized;
-    fn extract_palette(&self, raw_data: &str) -> Result<Palette, Box<dyn std::error::Error>>;
+    fn extract_palette(&self, raw_data: &str) -> Result<Vec<Swatch>, Box<dyn std::error::Error>>;
 }
 
 mod text;

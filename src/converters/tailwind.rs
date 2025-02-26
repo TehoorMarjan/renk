@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use crate::palette::{Palette, Swatch};
+use crate::palette::Swatch;
 use palette::{Srgb, FromColor, Oklch};
 use crate::converters::Converter;
 use regex::Regex;
@@ -16,7 +16,7 @@ impl Converter for TailwindConverter {
         TailwindConverter { regex }
     }
 
-    fn extract_palette(&self, raw_data: &str) -> Result<Palette, Box<dyn std::error::Error>> {
+    fn extract_palette(&self, raw_data: &str) -> Result<Vec<Swatch>, Box<dyn std::error::Error>> {
         let mut swatches = Vec::new();
 
         for cap in self.regex.captures_iter(raw_data) {
@@ -34,6 +34,6 @@ impl Converter for TailwindConverter {
             }
         }
 
-        Ok(Palette { swatches })
+        Ok(swatches)
     }
 }

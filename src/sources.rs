@@ -10,6 +10,7 @@ mod config;
 
 #[derive(Deserialize, Debug)]
 pub struct PaletteSource {
+    pub id: String,
     pub name: String,
     pub url: String,
     pub converter: String,

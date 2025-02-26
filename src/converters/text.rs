@@ -1,6 +1,6 @@
 use std::str::FromStr;
 use std::collections::HashMap;
-use crate::palette::{Palette, Swatch};
+use crate::palette::Swatch;
 use palette::Srgb;
 use crate::converters::Converter;
 use regex::Regex;
@@ -16,8 +16,8 @@ impl Converter for TextConverter {
         TextConverter { regex }
     }
 
-    fn extract_palette(&self, raw_data: &str) -> Result<Palette, Box<dyn std::error::Error>> {
-        let mut swatches = Vec::new();
+    fn extract_palette(&self, raw_data: &str) -> Result<Vec<Swatch>, Box<dyn std::error::Error>> {
+        let mut swatches: Vec<Swatch> = Vec::new();
 
         for cap in self.regex.captures_iter(raw_data) {
             let name = cap.name("name").ok_or("Missing name capture")?.as_str().to_string();
@@ -26,6 +26,6 @@ impl Converter for TextConverter {
             swatches.push(Swatch { name, color });
         }
 
-        Ok(Palette { swatches })
+        Ok(swatches)
     }
 }

@@ -13,6 +13,7 @@ pub struct Swatch {
 }
 
 pub struct Palette {
+    pub name: String,
     pub swatches: Vec<Swatch>,
 }
 
@@ -25,7 +26,11 @@ fn download_palette(url: &str) -> Result<String, Error> {
 pub fn convert(source: &PaletteSource, destination: &str) -> Result<(), Box<dyn std::error::Error>> {
     let response_text = download_palette(&source.url)?;
     let converter = create_converter(source)?;
-    let palette = converter.extract_palette(&response_text)?;
+    let swatches = converter.extract_palette(&response_text)?;
+    let palette = Palette {
+        name: source.name.clone(),
+        swatches: swatches,
+    };
 
     // Implement the logic to save the palette to the destination format
     let options = HashMap::new();

@@ -1,7 +1,8 @@
 {
     "sources": [
         {
-            "name": "open-color",
+            "id": "open-color",
+            "name": "Open Color",
             "url": "https://raw.githubusercontent.com/yeun/open-color/refs/heads/master/open-color.css",
             "converter": "text",
             "options": {
@@ -9,7 +10,8 @@
             }
         },
         {
-            "name": "reasonable-colors",
+            "id": "reasonable-colors",
+            "name": "Reasonable Colors",
             "url": "https://raw.githubusercontent.com/matthewhowell/reasonable-colors/refs/heads/master/reasonable-colors.css",
             "converter": "text",
             "options": {
@@ -17,14 +19,16 @@
             }
         },
         {
-            "name": "tailwind",
+            "id": "tailwind",
+            "name": "Tailwind",
             "url": "https://raw.githubusercontent.com/tailwindlabs/tailwindcss/refs/heads/main/packages/tailwindcss/theme.css",
             "converter": "tailwind",
             "options": {
             }
         },
         {
-            "name": "nord",
+            "id": "nord",
+            "name": "Nord",
             "url": "https://raw.githubusercontent.com/nordtheme/nord/refs/heads/develop/src/nord.css",
             "converter": "text",
             "options": {

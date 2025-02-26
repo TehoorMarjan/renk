@@ -57,7 +57,7 @@ fn list_sources(refresh: bool) {
     match sources::load_sources(refresh) {
         Ok(sources) => {
             for source in sources.sources {
-                println!("{}", source.name);
+                println!("{}", source.id);
             }
         }
         Err(e) => eprintln!("Error fetching sources: {}", e),
@@ -80,7 +80,7 @@ fn get_palette(destination: &str, source: &str, refresh: bool) {
         Err(e) => eprintln!("Error fetching sources: {}", e),
         Ok(sources) => {
             for source_description in sources.sources {
-                if source_description.name == source {
+                if source_description.id == source {
                     if let Err(e) = palette::convert(&source_description, &destination) {
                         eprintln!("Error converting swatch: {}", e);
                     }

@@ -1,6 +1,3 @@
-use std::io::Write;
-use std::fs::File;
-
 pub trait Writer {
     fn write(&self, content: &str) -> Result<(), Box<dyn std::error::Error>>;
 }
