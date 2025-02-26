@@ -1,4 +1,7 @@
 mod sources;
+mod palette;
+mod color;
+mod converters;
 
 use std::env;
 
@@ -37,6 +40,19 @@ fn list_sources() {
 }
 
 fn get_palette(destination: &str, source: &str) {
-    // Implement the logic to get the palette and convert it to the destination format
-    println!("Getting palette from {} to {}", source, destination);
+    match sources::load_sources() {
+        Err(e) => eprintln!("Error fetching sources: {}", e),
+        Ok(sources) => {
+            for source_description in sources.sources {
+                if source_description.name == source {
+                    if let Err(e) = palette::convert(&source_description, &destination) {
+                        eprintln!("Error converting swatch: {}", e);
+                    }
+                    return;
+                }
+            }
+            // If we reach this point, the source was not found
+            eprintln!("Invalid source: {}", source);
+        }
+    }
 }

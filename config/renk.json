@@ -3,33 +3,33 @@
         {
             "name": "open-color",
             "url": "https://raw.githubusercontent.com/yeun/open-color/refs/heads/master/open-color.css",
-            "converter": "css",
+            "converter": "text",
             "options": {
-                "regex": "--oc-(.*?):"
+                "regex": "--oc-(?P<name>.*?):\\s+(?P<value>#[[:xdigit:]]+);"
             }
         },
         {
             "name": "reasonable-colors",
             "url": "https://raw.githubusercontent.com/matthewhowell/reasonable-colors/refs/heads/master/reasonable-colors.css",
-            "converter": "css",
+            "converter": "text",
             "options": {
-                "regex": "--color-(.*?):"
+                "regex": "--color-(?P<name>.*?):\\s+(?P<value>#[[:xdigit:]]+);"
             }
         },
         {
-            "name": "tailwindcss",
-            "url": "https://raw.githubusercontent.com/tailwindlabs/tailwindcss/refs/heads/master/src/colors.js",
-            "converter": "js",
+            "name": "tailwind",
+            "url": "https://raw.githubusercontent.com/tailwindlabs/tailwindcss/refs/heads/main/packages/tailwindcss/theme.css",
+            "converter": "tailwind",
             "options": {
-                "object": "colors"
+                "regex": "--color-(?P<name>.*?):\\s+(?P<value>#[[:xdigit:]]+);"
             }
         },
         {
             "name": "nord",
             "url": "https://raw.githubusercontent.com/nordtheme/nord/refs/heads/develop/src/nord.css",
-            "converter": "css",
+            "converter": "text",
             "options": {
-                "regex": "--(nord\\d+):"
+                "regex": "--(?P<name>nord\\d+):\\s+(?P<value>#[[:xdigit:]]+);"
             }
         }
     ]
