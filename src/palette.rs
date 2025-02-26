@@ -29,12 +29,12 @@ pub fn convert(source: &PaletteSource, destination: &str) -> Result<(), Box<dyn 
     let swatches = converter.extract_palette(&response_text)?;
     let palette = Palette {
         name: source.name.clone(),
-        swatches: swatches,
+        swatches,
     };
 
     // Implement the logic to save the palette to the destination format
     let options = HashMap::new();
-    let exporter = create_exporter(destination, &options)?;
+    let exporter = create_exporter(destination, source, &options)?;
     exporter.export_palette(&palette)?;
 
     Ok(())
