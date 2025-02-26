@@ -21,7 +21,6 @@
             "url": "https://raw.githubusercontent.com/tailwindlabs/tailwindcss/refs/heads/main/packages/tailwindcss/theme.css",
             "converter": "tailwind",
             "options": {
-                "regex": "--color-(?P<name>.*?):\\s+(?P<value>#[[:xdigit:]]+);"
             }
         },
         {
