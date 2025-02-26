@@ -1,4 +1,3 @@
-mod color;
 mod converters;
 mod palette;
 mod sources;

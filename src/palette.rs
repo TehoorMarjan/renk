@@ -1,13 +1,13 @@
 use crate::sources::PaletteSource;
-use crate::color::Color;
-use crate::converters::{Converter, create_converter};
+use crate::converters::create_converter;
+use palette::Srgb;
 
 use reqwest::blocking::get;
 use reqwest::Error;
 
 pub struct Swatch {
     pub name: String,
-    pub color: Color,
+    pub color: Srgb<f32>,
 }
 
 pub struct Palette {
@@ -20,14 +20,14 @@ fn download_palette(url: &str) -> Result<String, Error> {
     Ok(response_text)
 }
 
-pub fn convert(source: &PaletteSource, destination: &str) -> Result<(), Box<dyn std::error::Error>> {
+pub fn convert(source: &PaletteSource, _destination: &str) -> Result<(), Box<dyn std::error::Error>> {
     let response_text = download_palette(&source.url)?;
     let converter = create_converter(source)?;
     let palette = converter.extract_palette(&response_text)?;
 
     // Print all swatches contained in the returned palette
     for swatch in palette.swatches {
-        println!("{}: {}", swatch.name, swatch.color.to_str());
+        println!("{}: {:?}", swatch.name, swatch.color);
     }
 
     // Implement the logic to save the palette to the destination format
