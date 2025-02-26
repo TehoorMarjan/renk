@@ -30,7 +30,9 @@ enum Commands {
 
 #[derive(Subcommand)]
 enum ListCommands {
+    #[clap(alias = "src")]
     Sources,
+    #[clap(aliases = &["dest", "dst"])]
     Destinations,
 }
 
