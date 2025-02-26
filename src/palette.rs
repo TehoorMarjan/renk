@@ -1,6 +1,6 @@
-use crate::sources::PaletteSource;
 use crate::converters::create_converter;
 use crate::exporters::create_exporter;
+use crate::sources::PaletteSource;
 use palette::Srgb;
 use std::collections::HashMap;
 
@@ -23,7 +23,10 @@ fn download_palette(url: &str) -> Result<String, Error> {
     Ok(response_text)
 }
 
-pub fn convert(source: &PaletteSource, destination: &str) -> Result<(), Box<dyn std::error::Error>> {
+pub fn convert(
+    source: &PaletteSource,
+    destination: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
     let response_text = download_palette(&source.url)?;
     let converter = create_converter(source)?;
     let swatches = converter.extract_palette(&response_text)?;

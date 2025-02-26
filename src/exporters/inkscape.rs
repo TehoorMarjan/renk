@@ -1,11 +1,11 @@
-use std::collections::HashMap;
-use std::path::PathBuf;
+use crate::exporters::Exporter;
+use crate::formatters::{Formatter, GplFormatter};
 use crate::palette::Palette;
 use crate::sources::PaletteSource;
-use crate::exporters::Exporter;
-use crate::formatters::{GplFormatter, Formatter};
 use crate::writers::{FileWriter, Writer};
 use dirs;
+use std::collections::HashMap;
+use std::path::PathBuf;
 
 pub struct InkscapeExporter {
     path: PathBuf,
@@ -14,7 +14,10 @@ pub struct InkscapeExporter {
 impl Exporter for InkscapeExporter {
     fn new(source: &PaletteSource, _options: &HashMap<String, String>) -> Self {
         let config_dir = dirs::config_dir().expect("Could not find config directory");
-        let path = config_dir.join("inkscape").join("palettes").join(format!("{}.gpl", source.id));
+        let path = config_dir
+            .join("inkscape")
+            .join("palettes")
+            .join(format!("{}.gpl", source.id));
         InkscapeExporter { path }
     }
 

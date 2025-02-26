@@ -1,7 +1,7 @@
 use palette::Srgb;
 
-use crate::palette::Palette;
 use crate::formatters::Formatter;
+use crate::palette::Palette;
 
 pub struct GplFormatter;
 

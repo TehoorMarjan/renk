@@ -1,5 +1,5 @@
-use std::io::Write;
 use std::fs::File;
+use std::io::Write;
 
 pub struct FileWriter {
     path: String,
@@ -7,7 +7,9 @@ pub struct FileWriter {
 
 impl FileWriter {
     pub fn new(path: &str) -> Self {
-        FileWriter { path: path.to_string() }
+        FileWriter {
+            path: path.to_string(),
+        }
     }
 }
 

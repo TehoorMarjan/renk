@@ -1,9 +1,9 @@
-use std::str::FromStr;
-use std::collections::HashMap;
+use crate::converters::Converter;
 use crate::palette::Swatch;
 use palette::Srgb;
-use crate::converters::Converter;
 use regex::Regex;
+use std::collections::HashMap;
+use std::str::FromStr;
 
 pub struct TextConverter {
     regex: Regex,
@@ -20,7 +20,11 @@ impl Converter for TextConverter {
         let mut swatches: Vec<Swatch> = Vec::new();
 
         for cap in self.regex.captures_iter(raw_data) {
-            let name = cap.name("name").ok_or("Missing name capture")?.as_str().to_string();
+            let name = cap
+                .name("name")
+                .ok_or("Missing name capture")?
+                .as_str()
+                .to_string();
             let value = cap.name("value").ok_or("Missing value capture")?.as_str();
             let color: Srgb<f32> = Srgb::from_str(value)?.into_format();
             swatches.push(Swatch { name, color });

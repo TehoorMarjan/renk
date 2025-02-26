@@ -1,8 +1,8 @@
-use std::collections::HashMap;
-use crate::palette::Swatch;
-use palette::{Srgb, FromColor, Oklch};
 use crate::converters::Converter;
+use crate::palette::Swatch;
+use palette::{FromColor, Oklch, Srgb};
 use regex::Regex;
+use std::collections::HashMap;
 use std::str::FromStr;
 
 pub struct TailwindConverter {
@@ -20,14 +20,30 @@ impl Converter for TailwindConverter {
         let mut swatches = Vec::new();
 
         for cap in self.regex.captures_iter(raw_data) {
-            let name = cap.name("name").ok_or("Missing name capture")?.as_str().to_string();
+            let name = cap
+                .name("name")
+                .ok_or("Missing name capture")?
+                .as_str()
+                .to_string();
             if let Some(value) = cap.name("value") {
                 let color: Srgb<f32> = Srgb::from_str(value.as_str())?.into_format();
                 swatches.push(Swatch { name, color });
             } else {
-                let value_l = cap.name("value_l").ok_or("Missing value_l capture")?.as_str().parse::<f32>()?;
-                let value_c = cap.name("value_c").ok_or("Missing value_c capture")?.as_str().parse::<f32>()?;
-                let value_h = cap.name("value_h").ok_or("Missing value_h capture")?.as_str().parse::<f32>()?;
+                let value_l = cap
+                    .name("value_l")
+                    .ok_or("Missing value_l capture")?
+                    .as_str()
+                    .parse::<f32>()?;
+                let value_c = cap
+                    .name("value_c")
+                    .ok_or("Missing value_c capture")?
+                    .as_str()
+                    .parse::<f32>()?;
+                let value_h = cap
+                    .name("value_h")
+                    .ok_or("Missing value_h capture")?
+                    .as_str()
+                    .parse::<f32>()?;
                 let oklch_color = Oklch::new(value_l, value_c, value_h);
                 let color: Srgb<f32> = Srgb::from_color(oklch_color);
                 swatches.push(Swatch { name, color });

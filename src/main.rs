@@ -1,9 +1,9 @@
 mod converters;
+mod exporters;
+mod formatters;
 mod palette;
 mod sources;
-mod exporters;
 mod writers;
-mod formatters;
 
 use clap::{Parser, Subcommand};
 
