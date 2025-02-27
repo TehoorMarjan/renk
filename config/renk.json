@@ -34,6 +34,15 @@
             "options": {
                 "regex": "--(?P<name>nord\\d+):\\s+(?P<value>#[[:xdigit:]]+);"
             }
+        },
+        {
+            "id": "dracula",
+            "name": "Dracula",
+            "url": "https://raw.githubusercontent.com/dracula/visual-studio-code/refs/heads/main/src/dracula.yml",
+            "converter": "text",
+            "options": {
+                "regex": "-\\s+&(?P<name>.*?)\\s+'(?P<value>#[[:xdigit:]]{6})'"
+            }
         }
     ]
 }
