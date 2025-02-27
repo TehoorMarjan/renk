@@ -25,7 +25,7 @@ pub struct RenkSources {
 fn download_sources() -> Result<String, Error> {
     println!("Refreshing sources file");
     let url = config::CONFIG_URL.to_string();
-    let response = get(url)?;
+    let response = get(url)?.error_for_status()?;
     let response_text = response.text()?;
     Ok(response_text)
 }
