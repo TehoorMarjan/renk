@@ -65,14 +65,10 @@ fn list_sources(refresh: bool) {
 }
 
 fn list_destinations() {
-    // Implement the logic to list available destinations
     println!("Available destinations:");
-    // Example destinations
-    println!("inkscape");
-    println!("gimp");
-    println!("gpl");
-    println!("scribus");
-    println!("libreoffice");
+    for exporter in exporters::list_exporters() {
+        println!("{}", exporter);
+    }
 }
 
 fn get_palette(destination: &str, source: &str, refresh: bool) {

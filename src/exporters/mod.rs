@@ -35,3 +35,13 @@ pub fn create_exporter(
     };
     Ok(exporter)
 }
+
+pub fn list_exporters() -> Vec<&'static str> {
+    vec![
+        "gpl",
+        "inkscape",
+        "scribus",
+        "scribusstd",
+        "soc",
+    ]
+}
