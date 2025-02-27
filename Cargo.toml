@@ -14,4 +14,4 @@ clap = { version = "4.0", features = ["derive"] }
 palette = "0.6"
 
 [build-dependencies]
-dotenv = "0.15"
+dotenvy = "0.15.7"
