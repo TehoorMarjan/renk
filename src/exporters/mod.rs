@@ -11,6 +11,9 @@ pub trait Exporter {
 
 mod gpl;
 mod inkscape;
+mod scribus;
+mod scribusstd;
+mod soc;
 
 pub fn create_exporter(
     destination: &str,
@@ -20,6 +23,9 @@ pub fn create_exporter(
     let exporter: Box<dyn Exporter> = match destination {
         "gpl" => Box::new(gpl::GplExporter::new(source, options)),
         "inkscape" => Box::new(inkscape::InkscapeExporter::new(source, options)),
+        "scribus" => Box::new(scribus::ScribusExporter::new(source, options)),
+        "scribusstd" => Box::new(scribusstd::ScribusStdExporter::new(source, options)),
+        "soc" => Box::new(soc::SocExporter::new(source, options)),
         unknown => {
             return Err(Box::new(std::io::Error::new(
                 std::io::ErrorKind::InvalidInput,

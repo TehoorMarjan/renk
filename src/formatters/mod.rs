@@ -5,4 +5,8 @@ pub trait Formatter {
 }
 
 mod gpl;
+mod scribus;
+mod soc;
 pub use gpl::GplFormatter;
+pub use scribus::ScribusFormatter;
+pub use soc::SocFormatter;
