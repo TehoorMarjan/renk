@@ -14,7 +14,7 @@ impl FileWriter {
 }
 
 impl super::Writer for FileWriter {
-    fn write(&self, content: &str) -> Result<(), Box<dyn std::error::Error>> {
+    fn write(&self, content: &str) -> std::io::Result<()> {
         let mut file = File::create(&self.path)?;
         file.write_all(content.as_bytes())?;
         Ok(())

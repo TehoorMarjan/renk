@@ -1,4 +1,4 @@
-use crate::exporters::Exporter;
+use crate::exporters::{Exporter, ExporterError};
 use crate::formatters::{Formatter, ScribusFormatter};
 use crate::palette::Palette;
 use crate::sources::PaletteSource;
@@ -12,11 +12,15 @@ impl Exporter for ScribusStdExporter {
         ScribusStdExporter {}
     }
 
-    fn export_palette(&self, palette: &Palette) -> Result<(), Box<dyn std::error::Error>> {
+    fn export_palette(&self, palette: &Palette) -> Result<(), ExporterError> {
         let formatter = ScribusFormatter;
-        let formatted_palette = formatter.format_palette(palette)?;
+        let formatted_palette = formatter
+            .format_palette(palette)
+            .map_err(|e| ExporterError::WriteError(e.to_string()))?;
         let writer = StdoutWriter;
-        writer.write(&formatted_palette)?;
+        writer
+            .write(&formatted_palette)
+            .map_err(|e| ExporterError::WriteError(e.to_string()))?;
         Ok(())
     }
 }

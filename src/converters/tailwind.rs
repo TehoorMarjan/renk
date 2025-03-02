@@ -1,4 +1,4 @@
-use crate::converters::Converter;
+use crate::converters::{Converter, ConverterError};
 use crate::palette::Swatch;
 use palette::{FromColor, Oklch, Srgb};
 use regex::Regex;
@@ -16,34 +16,39 @@ impl Converter for TailwindConverter {
         TailwindConverter { regex }
     }
 
-    fn extract_palette(&self, raw_data: &str) -> Result<Vec<Swatch>, Box<dyn std::error::Error>> {
+    fn extract_palette(&self, raw_data: &str) -> Result<Vec<Swatch>, ConverterError> {
         let mut swatches = Vec::new();
 
         for cap in self.regex.captures_iter(raw_data) {
             let name = cap
                 .name("name")
-                .ok_or("Missing name capture")?
+                .ok_or_else(|| ConverterError::MissingCapture("name".to_string()))?
                 .as_str()
                 .to_string();
             if let Some(value) = cap.name("value") {
-                let color: Srgb<f32> = Srgb::from_str(value.as_str())?.into_format();
+                let color: Srgb<f32> = Srgb::from_str(value.as_str())
+                    .map_err(|e| ConverterError::ParseError(e.to_string()))?
+                    .into_format();
                 swatches.push(Swatch { name, color });
             } else {
                 let value_l = cap
                     .name("value_l")
-                    .ok_or("Missing value_l capture")?
+                    .ok_or_else(|| ConverterError::MissingCapture("value_l".to_string()))?
                     .as_str()
-                    .parse::<f32>()?;
+                    .parse::<f32>()
+                    .map_err(|e| ConverterError::ParseError(e.to_string()))?;
                 let value_c = cap
                     .name("value_c")
-                    .ok_or("Missing value_c capture")?
+                    .ok_or_else(|| ConverterError::MissingCapture("value_c".to_string()))?
                     .as_str()
-                    .parse::<f32>()?;
+                    .parse::<f32>()
+                    .map_err(|e| ConverterError::ParseError(e.to_string()))?;
                 let value_h = cap
                     .name("value_h")
-                    .ok_or("Missing value_h capture")?
+                    .ok_or_else(|| ConverterError::MissingCapture("value_h".to_string()))?
                     .as_str()
-                    .parse::<f32>()?;
+                    .parse::<f32>()
+                    .map_err(|e| ConverterError::ParseError(e.to_string()))?;
                 let oklch_color = Oklch::new(value_l, value_c, value_h);
                 let color: Srgb<f32> = Srgb::from_color(oklch_color);
                 swatches.push(Swatch { name, color });

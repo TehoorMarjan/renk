@@ -1,4 +1,4 @@
-use crate::converters::Converter;
+use crate::converters::{Converter, ConverterError};
 use crate::palette::Swatch;
 use palette::Srgb;
 use regex::Regex;
@@ -16,17 +16,22 @@ impl Converter for TextConverter {
         TextConverter { regex }
     }
 
-    fn extract_palette(&self, raw_data: &str) -> Result<Vec<Swatch>, Box<dyn std::error::Error>> {
+    fn extract_palette(&self, raw_data: &str) -> Result<Vec<Swatch>, ConverterError> {
         let mut swatches: Vec<Swatch> = Vec::new();
 
         for cap in self.regex.captures_iter(raw_data) {
             let name = cap
                 .name("name")
-                .ok_or("Missing name capture")?
+                .ok_or_else(|| ConverterError::MissingCapture("name".to_string()))?
                 .as_str()
                 .to_string();
-            let value = cap.name("value").ok_or("Missing value capture")?.as_str();
-            let color: Srgb<f32> = Srgb::from_str(value)?.into_format();
+            let value = cap
+                .name("value")
+                .ok_or_else(|| ConverterError::MissingCapture("value".to_string()))?
+                .as_str();
+            let color: Srgb<f32> = Srgb::from_str(value)
+                .map_err(|e| ConverterError::ParseError(e.to_string()))?
+                .into_format();
             swatches.push(Swatch { name, color });
         }
 

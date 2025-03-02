@@ -1,4 +1,4 @@
-use crate::exporters::Exporter;
+use crate::exporters::{Exporter, ExporterError};
 use crate::formatters::{Formatter, ScribusFormatter};
 use crate::palette::Palette;
 use crate::sources::PaletteSource;
@@ -16,11 +16,19 @@ impl Exporter for ScribusExporter {
         ScribusExporter { output_path }
     }
 
-    fn export_palette(&self, palette: &Palette) -> Result<(), Box<dyn std::error::Error>> {
+    fn export_palette(&self, palette: &Palette) -> Result<(), ExporterError> {
         let formatter = ScribusFormatter;
-        let formatted_palette = formatter.format_palette(palette)?;
-        let writer = FileWriter::new(self.output_path.to_str().unwrap());
-        writer.write(&formatted_palette)?;
+        let formatted_palette = formatter
+            .format_palette(palette)
+            .map_err(|e| ExporterError::FormattingError(e.to_string()))?;
+        let path = self
+            .output_path
+            .to_str()
+            .ok_or_else(|| ExporterError::WriteError("Unable to obtain path".to_string()))?;
+        let writer = FileWriter::new(path);
+        writer
+            .write(&formatted_palette)
+            .map_err(|e| ExporterError::WriteError(e.to_string()))?;
         Ok(())
     }
 }

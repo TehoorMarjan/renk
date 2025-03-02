@@ -1,4 +1,4 @@
-use crate::formatters::Formatter;
+use crate::formatters::{Formatter, FormatterError};
 use crate::palette::Palette;
 use palette::Srgb;
 use quick_xml::se::to_string;
@@ -54,7 +54,7 @@ struct SocColors {
 pub struct SocFormatter;
 
 impl Formatter for SocFormatter {
-    fn format_palette(&self, palette: &Palette) -> Result<String, Box<dyn std::error::Error>> {
+    fn format_palette(&self, palette: &Palette) -> Result<String, FormatterError> {
         let mut colors = Vec::new();
 
         for swatch in &palette.swatches {
@@ -66,7 +66,7 @@ impl Formatter for SocFormatter {
             });
         }
 
-        let soc_colors = SocColors { 
+        let soc_colors = SocColors {
             office: String::from("http://openoffice.org/2000/office"),
             style: String::from("http://openoffice.org/2000/style"),
             text: String::from("http://openoffice.org/2000/text"),
@@ -83,8 +83,10 @@ impl Formatter for SocFormatter {
             math: String::from("http://www.w3.org/1998/Math/MathML"),
             form: String::from("http://openoffice.org/2000/form"),
             script: String::from("http://openoffice.org/2000/script"),
-            colors };
-        let xml_string = to_string(&soc_colors)?;
+            colors,
+        };
+        let xml_string =
+            to_string(&soc_colors).map_err(|e| FormatterError::FormatError(e.to_string()))?;
         let xml_declaration = "<?xml version='1.0' encoding='UTF-8'?>\n";
         let full_xml_string = format!("{}{}", xml_declaration, xml_string);
 

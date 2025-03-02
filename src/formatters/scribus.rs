@@ -1,4 +1,4 @@
-use crate::formatters::Formatter;
+use crate::formatters::{Formatter, FormatterError};
 use crate::palette::Palette;
 use palette::Srgb;
 use quick_xml::se::to_string;
@@ -22,7 +22,7 @@ struct ScribusColors {
 pub struct ScribusFormatter;
 
 impl Formatter for ScribusFormatter {
-    fn format_palette(&self, palette: &Palette) -> Result<String, Box<dyn std::error::Error>> {
+    fn format_palette(&self, palette: &Palette) -> Result<String, FormatterError> {
         let mut colors = Vec::new();
 
         for swatch in &palette.swatches {
@@ -35,7 +35,8 @@ impl Formatter for ScribusFormatter {
         }
 
         let scribus_colors = ScribusColors { colors };
-        let xml_string = to_string(&scribus_colors)?;
+        let xml_string =
+            to_string(&scribus_colors).map_err(|e| FormatterError::FormatError(e.to_string()))?;
 
         Ok(xml_string)
     }
